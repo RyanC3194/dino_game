@@ -3,14 +3,13 @@ import copy
 from sprites import *
 
 class State:
-    def __init__(self, dino=Dino(), obstacles=list(), point=0, speed=1, difficulty=1, width=500, height=50):
-        self.point = point
+    def __init__(self, dino=Dino(), speed=1, width=500, height=50):
+        self.point = 0
         self.speed = speed
-        self.difficulty = difficulty
         self.height = height
         self.width = width
         self.dino = dino
-        self.obstacles = obstacles
+        self.obstacles = list()
 
     def next(self, action):
         self.dino.move(action)
