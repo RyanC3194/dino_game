@@ -3,7 +3,7 @@ import copy
 from sprites import *
 
 class State:
-    def __init__(self, dino=Dino(), obstacles=list(), point=0, speed=1, difficulty=1, width=250, height=50):
+    def __init__(self, dino=Dino(), obstacles=list(), point=0, speed=1, difficulty=1, width=500, height=50):
         self.point = point
         self.speed = speed
         self.difficulty = difficulty

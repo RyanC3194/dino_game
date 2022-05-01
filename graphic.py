@@ -18,7 +18,7 @@ class TerminalGraphic:
         print("-" * width)
         for h in range(height - 1, -1, -1):
             print("|", end="")
-            for w in range(width):
+            for w in range(width / 2):
                 c = "*" if state.dino.is_inside((w, h)) else " "
                 for obstacle in state.obstacles:
                     c = "!" if obstacle.is_inside((w, h)) else c
@@ -73,4 +73,4 @@ class TkGraphic:
         self.canvas.create_rectangle(0, 0, self.width, self.height, fill="white")
 
     def map_coordinate(self, state, x, y):
-        return x / state.width * self.width, y / state.height * self.height
+        return x / state.width * self.width * 2, y / state.height * self.height
