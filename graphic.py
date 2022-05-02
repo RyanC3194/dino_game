@@ -58,7 +58,6 @@ class TkGraphic:
         self.canvas.create_text(self.width - self.width / 15, self.height / 15, text="Score: " + str(score), font="20")
 
     def end(self, state):
-        self.clear_canvas()
         self.canvas.create_text(self.width / 2, self.height / 2, text="Game Ended. Your Score: " + str(state.point),
                                 font='100')
         self.restart_button.place(x=self.width / 2, y=self.height / 2 + self.height / 8, anchor="center")
