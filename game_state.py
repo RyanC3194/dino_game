@@ -1,4 +1,5 @@
 import copy
+import random
 
 from sprites import *
 
@@ -10,12 +11,18 @@ class State:
         self.width = width
         self.dino = Dino()
         self.obstacles = list()
+        self.last_obstacle_tick = 0
+
 
     def next(self, action):
         self.dino.move(action)
+        self.dino.alive = not self.check_collision()
         for obstacle in self.obstacles:
             obstacle.move()
         self.point += self.speed
+
+        if random.random() < (self.point - self.last_obstacle_tick ) / 30:
+            self.create_obstacle()
 
     def get_next(self, action):
         new_state = copy.deepcopy(self)
@@ -24,3 +31,12 @@ class State:
 
     def create_obstacle(self, width = 5, height=15):
         self.obstacles.append(Obstacle(self.width, 0, width, height))
+
+    # return true if a dino is partially inside a obstacle
+    def check_collision(self):
+        # check collision
+        # only checking the bottom right of the dino is sufficient
+        for obstacle in self.obstacles:
+            if self.dino.collide(obstacle):
+                return True
+        return False

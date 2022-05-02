@@ -1,5 +1,4 @@
 import time
-import random
 
 # custom imports
 from game_state import *
@@ -36,22 +35,7 @@ class Game:
     def next(self):
         self.state.next(self.agent.get_action(self.state))
         self.tick += 1
-        if random.random() < (self.tick - self.last_obstacle_tick ) / 30:
-            self.create_obstacle()
-        self.state.dino.alive = not self.check_collision()
 
-    # return true if a dino is partially inside a obstacle
-    def check_collision(self):
-        # check collision
-        # only checking the bottom right of the dino is sufficient
-        for obstacle in self.state.obstacles:
-            if self.state.dino.collide(obstacle):
-                return True
-        return False
-
-    def create_obstacle(self):
-        self.state.create_obstacle(height=random.randint(1,3) * 5)
-        self.last_obstacle_tick = self.tick
 
     def display(self):
         self.graphic.display(self.state)
