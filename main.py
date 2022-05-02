@@ -19,6 +19,7 @@ class Game:
 
     def restart(self):
         self.__init__(State(), self.agent, self.graphic, self.tick_speed)
+        self.tick = 0
         self.loop()
 
     def loop(self):
@@ -30,6 +31,7 @@ class Game:
             time.sleep(self.tick_speed)
 
         self.graphic.end(self.state)
+        self.restart()
 
     def next(self):
         self.state.next(self.agent.get_action(self.state))

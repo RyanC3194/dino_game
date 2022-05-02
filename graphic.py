@@ -39,14 +39,30 @@ class TkGraphic:
         self.canvas = tk.Canvas(self.window, width=self.width, height=self.height)
         self.canvas.pack()
         self.clear_canvas()
+        self.restart_button = tk.Button(self.window, text="restart", command=self.restart, font="50")
         self.window.update()
+
+    def restart(self):
+        self.restart_button.place_forget()
+        self.window.quit()
 
     def display(self, state):
         self.clear_canvas()
         self.draw_dino(state)
         self.draw_obstacles(state)
+        self.draw_score(state.point)
 
         self.canvas.update()
+
+    def draw_score(self, score):
+        self.canvas.create_text(self.width - self.width / 15, self.height / 15, text="Score: " + str(score), font="20")
+
+    def end(self, state):
+        self.clear_canvas()
+        self.canvas.create_text(self.width / 2, self.height / 2, text="Game Ended. Your Score: " + str(state.point),
+                                font='100')
+        self.restart_button.place(x=self.width / 2, y=self.height / 2 + self.height / 8, anchor="center")
+        self.window.mainloop()
 
     def draw_dino(self, state):
         self.draw_sprite(state, state.dino)
@@ -55,13 +71,6 @@ class TkGraphic:
         obstacles = state.obstacles
         for obstacle in obstacles:
             self.draw_sprite(state, obstacle)
-
-    def end(self, state):
-        self.clear_canvas()
-        self.canvas.create_text(self.width / 2, self.height / 2, text="Game Ended. Your Score: " + str(state.point),
-                                font='100')
-        self.canvas.create_text(self.width / 2, self.height / 2 + self.height / 8, text="Restart", font="50")
-        self.window.mainloop()
 
     def draw_sprite(self, state, sprite):
         x1, y1 = self.map_coordinate(state, sprite.x, sprite.y)
