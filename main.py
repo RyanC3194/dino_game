@@ -22,12 +22,10 @@ class Game:
         self.loop()
 
     def loop(self):
-        while self.state.dino.is_alive():
-            self.next()
+        while not self.state.ended():
             self.display()
-            if not self.state.dino.is_alive():
-                break
             time.sleep(self.tick_speed)
+            self.next()
 
         self.graphic.end(self.state)
         self.restart()
