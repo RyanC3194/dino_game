@@ -43,11 +43,16 @@ class TkGraphic:
         self.canvas.pack()
         self.clear_canvas()
         self.restart_button = tk.Button(self.window, text="restart", command=self.restart, font="50")
+        self.quit_button = tk.Button(self.window, text="quit", command=self.quit, font="30")
         self.restart = False
         self.window.update()
 
+    def quit(self):
+        self.window.quit()
+
     def restart(self):
         self.restart_button.place_forget()
+        self.quit_button.place_forget()
         self.restart = True
         self.window.quit()
 
@@ -66,6 +71,8 @@ class TkGraphic:
         self.canvas.create_text(self.width / 2, self.height / 2, text="Game Ended. Your Score: " + str(state.point),
                                 font='100')
         self.restart_button.place(x=self.width / 2, y=self.height / 2 + self.height / 8, anchor="center")
+        self.quit_button.place(x=self.width / 2, y=self.height / 2 + 2 * self.height / 8, anchor="center")
+
         self.window.mainloop()
 
     def draw_dino(self, state):
