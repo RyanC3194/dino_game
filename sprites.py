@@ -21,7 +21,7 @@ class Sprite:
 
 
 class Dino(Sprite):
-    def __init__(self, x=10, y=0, width=15, height=10, alive=True, acceleration=-7.5, jump_speed=17,
+    def __init__(self, x=10, y=0.0, width=15, height=10, alive=True, acceleration=-1.5, jump_speed=17,
                  dino_state=DinoState.GROUND):
         super().__init__(x, y, width, height)
         self.state = dino_state
@@ -49,7 +49,7 @@ class Dino(Sprite):
         else:
             self.speed += self.acceleration
 
-        self.y += self.speed
+        self.y += self.speed * 0.1
         if self.y < 0:
             self.speed = 0
             self.y = 0
@@ -75,4 +75,4 @@ class Obstacle(Sprite):
 
     # should only be able to move left
     def move(self):
-        self.x += self.speed
+        self.x += self.speed * 0.1

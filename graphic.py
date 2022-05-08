@@ -3,6 +3,9 @@ import tkinter as tk
 
 
 class NoGraphic:
+    def __init__(self):
+        self.restart = False
+
     def display(self, state):
         pass
 
@@ -40,10 +43,12 @@ class TkGraphic:
         self.canvas.pack()
         self.clear_canvas()
         self.restart_button = tk.Button(self.window, text="restart", command=self.restart, font="50")
+        self.restart = False
         self.window.update()
 
     def restart(self):
         self.restart_button.place_forget()
+        self.restart = True
         self.window.quit()
 
     def display(self, state):
@@ -81,4 +86,4 @@ class TkGraphic:
         self.canvas.create_rectangle(0, 0, self.width, self.height, fill="white")
 
     def map_coordinate(self, state, x, y):
-        return x / state.width * self.width * 2, y / state.height * self.height
+        return x / state.width * self.width, y / state.height * self.height

@@ -14,21 +14,22 @@ class Game:
         self.tick = 0
         self.last_obstacle_tick = 0
         self.tick_speed = tick_speed
-        self.state.create_obstacle()
 
     def restart(self):
         self.__init__(State(), self.agent, self.graphic, self.tick_speed)
         self.tick = 0
+        self.graphic.restart = False
         self.loop()
 
     def loop(self):
         while not self.state.ended():
-            self.display()
             time.sleep(self.tick_speed)
             self.next()
+            self.display()
 
         self.graphic.end(self.state)
-        self.restart()
+        if self.graphic.restart:
+            self.restart()
 
     def next(self):
         self.state.next(self.agent.get_action(self.state))
@@ -39,7 +40,13 @@ class Game:
         self.graphic.display(self.state)
 
 
+def train(agent, times):
+    for i in range(times):
+        game = Game(State(), agent, NoGraphic)
+        game.loop()
+
+
 if __name__ == "__main__":
     print("hello")
-    game = Game(State(), KeyBoardAgent(), TkGraphic(width=750, height = 300), 0.1)
+    game = Game(State(), KeyBoardAgent(), TkGraphic(width=1000, height = 350), 0.01)
     game.loop()

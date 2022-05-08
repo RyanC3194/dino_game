@@ -3,8 +3,9 @@ import random
 
 from sprites import *
 
+
 class State:
-    def __init__(self, speed=1, width=500, height=50):
+    def __init__(self, speed=1, width=300, height=50):
         self.point = 0
         self.speed = speed
         self.height = height
@@ -24,17 +25,17 @@ class State:
         self.point += self.speed
         self.obstacle_tick += 1
 
-        if random.random() < self.obstacle_tick / 30:
-            self.create_obstacle()
+        if random.random() < self.obstacle_tick / 30 * 0.01:
+            self.create_obstacle(height = random.randint(5, 13))
 
     def get_next(self, action):
         new_state = copy.deepcopy(self)
         new_state.next(action)
         return new_state
 
-    def create_obstacle(self, width = 5, height=15):
+    def create_obstacle(self, width=5, height=12):
         self.obstacles.append(Obstacle(self.width, 0, width, height))
-        self.obstacle_tick = 0
+        self.obstacle_tick = -1 * height / 2
 
     # return true if a dino is partially inside a obstacle
     def check_collision(self):
