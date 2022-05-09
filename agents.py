@@ -1,14 +1,14 @@
 import keyboard
-import sys
+import random
+
 from game_enums import *
 from feature_extractor import *
-import random
 
 
 class DinoAgent:
     def get_action(self, state):
         print("Not Defined")
-        sys.exit(1)
+        raise Exception("Not implemented")
 
 
 # always jump
@@ -18,9 +18,6 @@ class JumpAgent(DinoAgent):
 
 
 class KeyBoardAgent(DinoAgent):
-    def __init__(self):
-        pass
-
     def get_action(self, state):
         # up arrow is pressed
         if keyboard.is_pressed(keyboard.KEY_UP) or keyboard.is_pressed("w") or keyboard.is_pressed(" "):
@@ -29,12 +26,12 @@ class KeyBoardAgent(DinoAgent):
 
 
 class QLearningAgent(DinoAgent):
-    def __init__(self, extractor =  FirstObstacleExtractor(),alpha=0.2, gamma=1, epsilon = 0.2):
+    def __init__(self, extractor=FirstObstacleExtractor(), alpha=0.1, gamma=1, epsilon=0.1):
         self.q = dict()
         self.extractor = extractor
         self.gamma = gamma
         self.alpha = alpha
-        self.epsolon = epsilon
+        self.epsilon = epsilon
 
     def compute_action(self, state):
         actions = state.possible_actions()
@@ -66,14 +63,15 @@ class QLearningAgent(DinoAgent):
     def update(self, state, action, new_state):
         simple_state = self.extractor.get_features(state, action)
         if (simple_state, action) in self.q:
-            self.q[(simple_state, action)] = (1 - self.alpha) * self.q[(simple_state, action)] + self.alpha * (state.get_reward(action) + self.get_max_q_value(new_state) * self.gamma)
+            self.q[(simple_state, action)] = (1 - self.alpha) * self.q[(simple_state, action)] + self.alpha * (
+                        state.get_reward(action) + self.get_max_q_value(new_state) * self.gamma)
         else:
-            self.q[(simple_state, action)] = self.alpha * (state.get_reward(action) + self.get_max_q_value(new_state) * self.gamma)
+            self.q[(simple_state, action)] = self.alpha * (
+                        state.get_reward(action) + self.get_max_q_value(new_state) * self.gamma)
 
     def get_action(self, state):
         # update the q value weights
-
-        if random.random() < self.epsolon:
+        if random.random() < self.epsilon:
             action = random.choice(state.possible_actions())
         else:
             action = self.compute_action(state)

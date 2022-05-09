@@ -120,10 +120,9 @@ class TkGraphicQAgent(TkGraphic):
         t = ""
         for action in actions:
             t += f"{action}: {agent.get_q_value(state, action)} "
-        self.canvas.create_text(self.width / 2, self.height / 15, text= t, font="20")
+        self.canvas.create_text(self.width / 2, self.height / 15, text=t, font="20")
         self.canvas.update()
 
     def display_with_q(self, state, agent):
         self.display(state)
         self.draw_q_value(state, agent)
-

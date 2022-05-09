@@ -31,7 +31,7 @@ class State:
         self.obstacle_tick += 1
 
         if self.obstacle_tick > random.normalvariate(100, 20):
-            self.create_obstacle(height = random.randint(5, 13))
+            self.create_obstacle(height=random.randint(5, 13), width=random.randint(1, 3) * 5)
 
     def get_next(self, action):
         new_state = copy.deepcopy(self)
