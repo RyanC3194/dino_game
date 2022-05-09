@@ -1,4 +1,5 @@
 import time
+import argparse
 
 # custom imports
 from game_state import *
@@ -36,7 +37,6 @@ class Game:
         self.state.next(self.agent.get_action(self.state))
         self.tick += 1
 
-
     def display(self):
         self.graphic.display(self.state)
 
@@ -48,17 +48,22 @@ class QGame(Game):
 
 def train(agent, times):
     for i in range(times):
-        # graphic = TkGraphicQAgent(width=1000, height = 350)
-        print(i)
         graphic = NoGraphic()
         graphic.auto_restart = 0
-        game = QGame(State(), agent, graphic, 0)
-        game.loop()
+        Game(State(), agent, graphic, 0).loop()
 
 
 if __name__ == "__main__":
-    agent = QLearningAgent()
-    train(agent, 100)
-    agent.epsolon = 0
-    game = QGame(State(), agent, TkGraphicQAgent(width=1000, height = 350), 0.01)
-    game.loop()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-a", "--agent", default="KeyBoard", help="Type of agent")
+    parser.add_argument("-i", "--iterations", default=100, type=int, help="Training Iterations")
+    args = parser.parse_args()
+    if args.agent.lower() == "keyboard":
+        Game(State(), KeyBoardAgent(), TkGraphic(width=1000, height=350), 0.01).loop()
+    elif args.agent.lower() == "q":
+        agent = QLearningAgent()
+        train(agent, args.iterations)
+        agent.epsolon = 0
+        QGame(State(), agent, TkGraphicQAgent(width=1000, height=350), 0.00).loop()
+    else:
+        print("Invalid agent")
