@@ -14,6 +14,7 @@ class Game:
         self.tick = 0
         self.last_obstacle_tick = 0
         self.tick_speed = tick_speed
+        self.max_points = 10000
 
     def restart(self):
         self.__init__(State(), self.agent, self.graphic, self.tick_speed)
@@ -22,7 +23,7 @@ class Game:
         self.loop()
 
     def loop(self):
-        while not self.state.ended():
+        while self.state.point < self.max_points and not self.state.ended():
             time.sleep(self.tick_speed)
             self.next()
             self.display()
@@ -40,13 +41,24 @@ class Game:
         self.graphic.display(self.state)
 
 
+class QGame(Game):
+    def display(self):
+        self.graphic.display_with_q(self.state, self.agent)
+
+
 def train(agent, times):
     for i in range(times):
-        game = Game(State(), agent, NoGraphic)
+        # graphic = TkGraphicQAgent(width=1000, height = 350)
+        print(i)
+        graphic = NoGraphic()
+        graphic.auto_restart = 0
+        game = QGame(State(), agent, graphic, 0)
         game.loop()
 
 
 if __name__ == "__main__":
-    print("hello")
-    game = Game(State(), KeyBoardAgent(), TkGraphic(width=1000, height = 350), 0.01)
+    agent = QLearningAgent()
+    train(agent, 100)
+    agent.epsolon = 0
+    game = QGame(State(), agent, TkGraphicQAgent(width=1000, height = 350), 0.01)
     game.loop()
