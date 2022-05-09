@@ -5,11 +5,18 @@ import tkinter as tk
 class NoGraphic:
     def __init__(self):
         self.restart = False
+        self.auto_restart = 0
 
     def display(self, state):
         pass
 
+    def display_with_q(self, state, action):
+        pass
+
     def end(self, state):
+        if self.auto_restart > 0:
+            self.restart = True
+        self.auto_restart -= 1
         pass
 
 
@@ -45,6 +52,7 @@ class TkGraphic:
         self.restart_button = tk.Button(self.window, text="restart", command=self.restart, font="50")
         self.quit_button = tk.Button(self.window, text="quit", command=self.quit, font="30")
         self.restart = False
+        self.auto_restart = -1
         self.window.update()
 
     def quit(self):
@@ -70,10 +78,20 @@ class TkGraphic:
     def end(self, state):
         self.canvas.create_text(self.width / 2, self.height / 2, text="Game Ended. Your Score: " + str(state.point),
                                 font='100')
-        self.restart_button.place(x=self.width / 2, y=self.height / 2 + self.height / 8, anchor="center")
-        self.quit_button.place(x=self.width / 2, y=self.height / 2 + 2 * self.height / 8, anchor="center")
 
-        self.window.mainloop()
+        if self.auto_restart == -1:
+
+            self.restart_button.place(x=self.width / 2, y=self.height / 2 + self.height / 8, anchor="center")
+            self.quit_button.place(x=self.width / 2, y=self.height / 2 + 2 * self.height / 8, anchor="center")
+
+            self.window.mainloop()
+        elif self.auto_restart == 0:
+            self.restart = False
+            return
+        else:
+            self.auto_restart -= 1
+            self.restart = True
+            return
 
     def draw_dino(self, state):
         self.draw_sprite(state, state.dino)
@@ -94,3 +112,18 @@ class TkGraphic:
 
     def map_coordinate(self, state, x, y):
         return x / state.width * self.width, y / state.height * self.height
+
+
+class TkGraphicQAgent(TkGraphic):
+    def draw_q_value(self, state, agent):
+        actions = state.possible_actions()
+        t = ""
+        for action in actions:
+            t += f"{action}: {agent.get_q_value(state, action)} "
+        self.canvas.create_text(self.width / 2, self.height / 15, text= t, font="20")
+        self.canvas.update()
+
+    def display_with_q(self, state, agent):
+        self.display(state)
+        self.draw_q_value(state, agent)
+
