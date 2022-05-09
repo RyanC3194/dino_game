@@ -76,3 +76,6 @@ class Obstacle(Sprite):
     # should only be able to move left
     def move(self):
         self.x += self.speed * 0.1
+
+    def __repr__(self):
+        return f"Obstacle at: {self.x}"
