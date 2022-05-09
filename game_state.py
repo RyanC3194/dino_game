@@ -12,6 +12,7 @@ class State:
         self.width = width
         self.dino = Dino()
         self.obstacles = list()
+        self.create_obstacle()
         self.obstacle_tick = 0
 
     def ended(self):
@@ -22,10 +23,14 @@ class State:
         self.dino.alive = not self.check_collision()
         for obstacle in self.obstacles:
             obstacle.move()
+
+        if self.obstacles[0].x < 0:
+            self.obstacles.pop(0)
+
         self.point += self.speed
         self.obstacle_tick += 1
 
-        if random.random() < self.obstacle_tick / 30 * 0.01:
+        if self.obstacle_tick > random.normalvariate(100, 20):
             self.create_obstacle(height = random.randint(5, 13))
 
     def get_next(self, action):
@@ -35,7 +40,7 @@ class State:
 
     def create_obstacle(self, width=5, height=12):
         self.obstacles.append(Obstacle(self.width, 0, width, height))
-        self.obstacle_tick = -1 * height / 2
+        self.obstacle_tick = 0
 
     # return true if a dino is partially inside a obstacle
     def check_collision(self):
@@ -45,3 +50,10 @@ class State:
             if self.dino.collide(obstacle):
                 return True
         return False
+
+    def possible_actions(self):
+        return [DinoActions.Nothing, DinoActions.Jump]
+
+    def get_reward(self, action):
+        new_state = self.get_next(action)
+        return 1 if not new_state.ended() else -500
