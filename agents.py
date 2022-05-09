@@ -23,7 +23,7 @@ class KeyBoardAgent(DinoAgent):
 
     def get_action(self, state):
         # up arrow is pressed
-        if keyboard.is_pressed(keyboard.KEY_UP) or keyboard.is_pressed("w"):
+        if keyboard.is_pressed(keyboard.KEY_UP) or keyboard.is_pressed("w") or keyboard.is_pressed(" "):
             return DinoActions.Jump
         return DinoActions.Nothing
 
